@@ -24,7 +24,7 @@ async def was_page_opened(driver):
 
     await asyncio.sleep(1)
     block_xpath = './/a[@class="live-block-competitors"]'
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, block_xpath)))
+    WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, block_xpath)))
 
 
 async def get_page_source(driver, url):
@@ -75,7 +75,6 @@ async def main(urls):
 
 if __name__ == '__main__':
     links = ['https://www.parimatch.ru/prematch/all/1|F', 'https://www.parimatch.ru/prematch/all/1|MA']
-    links = ['https://www.parimatch.ru/prematch/all/1|MA']
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(links))
     loop.close()
