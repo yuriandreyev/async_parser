@@ -2,4 +2,4 @@
 
 cd parimatch_parser
 docker build -t parimatch_parser .
-docker run -v /dev/shm:/dev/shm -v "$(pwd)":/parser parimatch_parser
+docker run --rm -v /dev/shm:/dev/shm -v "$(pwd)":/parser parimatch_parser
