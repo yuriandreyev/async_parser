@@ -1,3 +1,8 @@
+"""
+Parse sport events of Parimatch bookmaker asynchronously with Selenium
+Webdriver and output results to file in JSON format
+"""
+
 import asyncio
 import json
 from selenium import webdriver
@@ -6,6 +11,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from html_parser import parse_html
+
+WAIT_PAGE_IS_OPENED_SEC = 60
+SCROLLING_STEP_NUMBER = 10
 
 
 def get_driver():
@@ -24,7 +32,7 @@ async def was_page_opened(driver):
 
     await asyncio.sleep(1)
     block_xpath = './/a[@class="live-block-competitors"]'
-    WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, block_xpath)))
+    WebDriverWait(driver, WAIT_PAGE_IS_OPENED_SEC).until(EC.element_to_be_clickable((By.XPATH, block_xpath)))
 
 
 async def get_page_source(driver, url):
@@ -47,8 +55,10 @@ async def get_page_source(driver, url):
 async def scroll_to_page_bottom(driver):
     """Scrolling to page bottom to load entire page"""
 
-    for k in range(1, 11):  # split body height to 10 parts
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight*{})".format(k / 10))
+    # split body height to parts and scroll to page bottom step by step to
+    # load event data with javascript and get complete HTML page source
+    for k in range(1, 1 + SCROLLING_STEP_NUMBER):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight*{})".format(k / SCROLLING_STEP_NUMBER))
         await asyncio.sleep(1)
 
 
